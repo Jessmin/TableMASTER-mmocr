@@ -22,8 +22,8 @@ def read_in_chunks(file_path, chunk_size=1024*1024):
 class PubtabnetParser(object):
     def __init__(self, jsonl_path, is_toy=True, split='val', is_pse_preLabel=False, chunks_nums=16):
         self.split = split
-        self.raw_img_root = '/data_0/yejiaquan/data/TableRecognization/pubtabnet/'
-        self.save_root = '/data_0/yejiaquan/data/mmocr_pubtabnet_recognition_0726/'
+        self.raw_img_root = '/home/nas/media/Alice/dataset/pub'
+        self.save_root = '/home/nas/media/Alice/dataset/TAL_OCR_TABLE表格识别竞赛训练集/output/'
         self.detection_txt_folder = self.save_root + 'TxtPreLabel_{}/'.format(split)
         self.recognition_folder = self.save_root + 'recognition_{}_img/'.format(split)
         self.recognition_txt_folder = self.save_root + 'recognition_{}_txt'.format(split)
@@ -413,7 +413,10 @@ if __name__ == '__main__':
 
     # parse train
     nproc = 16
-    jsonl_path = r'/data_0/yejiaquan/data/TableRecognization/pubtabnet/PubTabNet_2.0.0.jsonl'
+    #  self.raw_img_root = '/home/nas/media/Alice/dataset/TAL_OCR_TABLE表格识别竞赛训练集/train_data'
+        # self.save_root = '/home/nas/media/Alice/dataset/TAL_OCR_TABLE表格识别竞赛训练集/output'
+    # jsonl_path = r'/home/nas/media/Alice/dataset/TAL_OCR_TABLE表格识别竞赛训练集/train_data/TalTabNet_train.json'
+    jsonl_path = r'/home/nas/Documents/workspace/TableMASTER-mmocr/table_recognition/PubTabNet-master/examples/PubTabNet_Examples.jsonl'
     parser = PubtabnetParser(jsonl_path, is_toy=False, split='train', is_pse_preLabel=False, chunks_nums=nproc)
 
     # multiprocessing
