@@ -22,9 +22,9 @@ def read_in_chunks(file_path, chunk_size=1024*1024):
 class PubtabnetParser(object):
     def __init__(self, jsonl_path, is_toy=True, split='val', is_pse_preLabel=False, chunks_nums=16):
         self.split = split
-        self.raw_img_root = '/home/nas/media/Alice/dataset/TAL_OCR_TABLE表格识别竞赛训练集/train_data/'
+        self.raw_img_root = '/home/zhaohj/Documents/dataset/Table/TAL'
         # self.save_root = '/home/nas/media/Alice/dataset/TAL_OCR_TABLE表格识别竞赛训练集/output/'
-        self.save_root = '/home/nas/Documents/workspace/dataset/TAL_OCR_TABLE表格识别竞赛训练集/output/'
+        self.save_root = '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/train/'
         self.detection_txt_folder = self.save_root + 'TxtPreLabel_{}/'.format(split)
         self.recognition_folder = self.save_root + 'recognition_{}_img/'.format(split)
         self.recognition_txt_folder = self.save_root + 'recognition_{}_txt'.format(split)
@@ -307,7 +307,7 @@ class PubtabnetParser(object):
             structure_fid = open(txt_filepath, 'w')
 
             # record image path
-            image_path = os.path.join(self.raw_img_root, f'{self.split}_img', filename)
+            image_path = os.path.join(self.raw_img_root, f'train_img', filename)
             structure_fid.write(image_path + '\n')
 
             # record structure token
@@ -326,7 +326,11 @@ class PubtabnetParser(object):
                 if 'bbox' not in cell.keys():
                     bbox_line = ','.join([str(0) for _ in range(4)]) + '\n'
                 else:
-                    bbox_line = ','.join([str(b) for b in cell['bbox']]) + '\n'
+                    cell_bbox = cell['bbox']
+                    _x = [x[0] for x in cell_bbox]
+                    _y = [x[1] for x in cell_bbox]
+                    cell_bbox = [min(_x),min(_y), max(_x), max(_y)]
+                    bbox_line = ','.join([str(b) for b in cell_bbox]) + '\n'
                 structure_fid.write(bbox_line)
 
             # if need pse preLabel, this part will get cell coord txt files.
@@ -424,7 +428,7 @@ if __name__ == '__main__':
 
     # parse train
     nproc = 16
-    jsonl_path = r'/home/nas/media/Alice/dataset/TAL_OCR_TABLE表格识别竞赛训练集/train_data/TalTabNet_train.json'
+    jsonl_path = r'/home/zhaohj/Documents/dataset/Table/TAL/train.json'
     parser = PubtabnetParser(jsonl_path, is_toy=False, split='train', is_pse_preLabel=False, chunks_nums=nproc)
 
     # multiprocessing

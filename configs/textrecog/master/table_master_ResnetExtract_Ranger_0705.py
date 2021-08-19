@@ -3,7 +3,8 @@ _base_ = [
 ]
 
 
-alphabet_file = './tools/data/alphabet/structure_alphabet.txt'
+# alphabet_file = './tools/data/alphabet/structure_alphabet.txt'
+alphabet_file = '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/train/textline_recognition_alphabet.txt'
 alphabet_len = len(open(alphabet_file, 'r').readlines())
 max_seq_len = 500
 
@@ -140,8 +141,8 @@ test_pipeline = [
 ]
 
 dataset_type = 'OCRDataset'
-train_img_prefix = '/data_0/yejiaquan/data/TableRecognization/pubtabnet/train/'
-train_anno_file1 = '/data_0/yejiaquan/data/TableRecognization/mergeStructLabelsAddEmptyEsb/'
+train_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/train_img'
+train_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/train/StructureLabelAddEmptyBbox_train'
 train1 = dict(
     type=dataset_type,
     img_prefix=train_img_prefix,
@@ -158,8 +159,8 @@ train1 = dict(
     pipeline=train_pipeline,
     test_mode=False)
 
-valid_img_prefix = '/data_0/yejiaquan/data/TableRecognization/pubtabnet/val/'
-valid_anno_file1 = '/data_0/yejiaquan/data/TableRecognization/mergeStructLabelsAddEmptyEsb_val/'
+valid_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/train_img'
+valid_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/val/StructureLabelAddEmptyBbox_train'
 valid = dict(
     type=dataset_type,
     img_prefix=valid_img_prefix,
@@ -177,8 +178,8 @@ valid = dict(
     dataset_info='table_master_dataset',
     test_mode=True)
 
-test_img_prefix = '/data_0/yejiaquan/data/TableRecognization/pubtabnet/val/'
-test_anno_file1 = '/data_0/yejiaquan/data/TableRecognization/mergeStructLabelsAddEmptyEsb_val/'
+test_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/train_img'
+test_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/val/StructureLabelAddEmptyBbox_train'
 test = dict(
     type=dataset_type,
     img_prefix=test_img_prefix,
