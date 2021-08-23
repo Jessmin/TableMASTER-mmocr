@@ -99,9 +99,9 @@ test_pipeline = [
 ]
 
 dataset_type = 'OCRDataset'
-img_prefix1 = ''
+img_prefix1 = '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/train/recognition_train_img'
 # train_anno_file1 = '/data_8/data/TableRecognition/regData/table_recognization_train_txt/all_refine.txt'
-train_anno_file1 = '/data_0/pubtabnet/processed_data/recognition_val.txt'
+train_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/train/recognition_train_txt/0.txt'
 train1 = dict(
     type=dataset_type,
     img_prefix=img_prefix1,

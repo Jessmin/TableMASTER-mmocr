@@ -4,7 +4,7 @@ _base_ = [
 
 
 # alphabet_file = './tools/data/alphabet/structure_alphabet.txt'
-alphabet_file = '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/train/textline_recognition_alphabet.txt'
+alphabet_file = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/textline_recognition_alphabet.txt'
 alphabet_len = len(open(alphabet_file, 'r').readlines())
 max_seq_len = 500
 
@@ -141,8 +141,8 @@ test_pipeline = [
 ]
 
 dataset_type = 'OCRDataset'
-train_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/train_img'
-train_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/train/StructureLabelAddEmptyBbox_train'
+train_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/Table/images'
+train_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/StructureLabelAddEmptyBbox_train'
 train1 = dict(
     type=dataset_type,
     img_prefix=train_img_prefix,
@@ -159,8 +159,8 @@ train1 = dict(
     pipeline=train_pipeline,
     test_mode=False)
 
-valid_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/train_img'
-valid_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/val/StructureLabelAddEmptyBbox_train'
+valid_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/Table/images'
+valid_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/StructureLabelAddEmptyBbox_val'
 valid = dict(
     type=dataset_type,
     img_prefix=valid_img_prefix,
@@ -178,8 +178,8 @@ valid = dict(
     dataset_info='table_master_dataset',
     test_mode=True)
 
-test_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/train_img'
-test_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/val/StructureLabelAddEmptyBbox_train'
+test_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/Table/images'
+test_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/StructureLabelAddEmptyBbox_val'
 test = dict(
     type=dataset_type,
     img_prefix=test_img_prefix,
@@ -198,8 +198,8 @@ test = dict(
     test_mode=True)
 
 data = dict(
-    samples_per_gpu=8,
-    workers_per_gpu=2,
+    samples_per_gpu=2,
+    workers_per_gpu=1,
     train=dict(type='ConcatDataset', datasets=[train1]),
     val=dict(type='ConcatDataset', datasets=[valid]),
     test=dict(type='ConcatDataset', datasets=[test]))
@@ -216,7 +216,7 @@ lr_config = dict(
     warmup_iters=50,
     warmup_ratio=1.0 / 3,
     step=[12, 15])
-total_epochs = 17
+total_epochs = 200
 
 # evaluation
 evaluation = dict(interval=1, metric='acc')
@@ -231,8 +231,8 @@ checkpoint_config = dict(interval=1)
 log_config = dict(
     interval=100,
     hooks=[
-        dict(type='TextLoggerHook')
-
+        dict(type='TextLoggerHook'),
+        dict(type='TensorboardLoggerHook')
     ])
 
 # yapf:enable

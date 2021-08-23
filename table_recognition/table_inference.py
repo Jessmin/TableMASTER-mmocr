@@ -297,7 +297,7 @@ class Runner:
             detect_res[0]['file_name'] = os.path.basename(p)
             detect_results.extend(detect_res)
             # detect visual
-            # detect_visual(p, detect_res, prefix=detect_res[0]['file_name'])
+            detect_visual(p, detect_res, prefix=detect_res[0]['file_name'])
             print("[GPU_{} : {} / {}] {} file detect inference. ".format(gpu_idx, i + 1, len(path), p))
 
         # save for recognition.
@@ -416,7 +416,8 @@ class Runner:
         :return:
         """
         print("Divide files to chunks for multiply gpu device inference.")
-        file_paths = glob.glob(folder + '*.png')
+        # file_paths = glob.glob(folder + '*.png')
+        file_paths = glob.glob(folder + '*.jpg')
         counts = len(file_paths)
         nums_per_chunk = counts // chunks_nums
         img_chunks = []
@@ -478,40 +479,40 @@ class Runner:
 
 if __name__ == '__main__':
     # Runner
-    chunk_nums = int(sys.argv[1])
-    chunk_id = int(sys.argv[2])
-    # 0: detect  1: recognize  2:structure
-    task_id = int(sys.argv[3])
+    # chunk_nums = int(sys.argv[1])
+    # chunk_id = int(sys.argv[2])
+    # # 0: detect  1: recognize  2:structure
+    # task_id = int(sys.argv[3])
 
     cfg = {
         'pse_config':'',
         'master_config':'',
-        'structure_master_config':'',
+        'structure_master_config': '/home/zhaohj/Documents/workspace/github_my/TableMASTER-mmocr/configs/textrecog/master/table_master_ResnetExtract_Ranger_0705.py',
         'pse_ckpt':'',
         'master_ckpt':'',
-        'structure_master_ckpt':'',
+        'structure_master_ckpt':'/home/zhaohj/Documents/workspace/github_my/TableMASTER-mmocr/output/epoch_50.pth',
         'end2end_result_folder':'',
-        'structure_master_result_folder':'',
-
-        'test_folder':'./val',
+        'structure_master_result_folder':'./structure_master_result_folder',
+        'test_folder':'/home/zhaohj/Documents/dataset/Table/TAL/val/',
         # 'test_folder':'./smallVal10'
-        'chunks_nums':chunk_nums
+        'chunks_nums':1
     }
 
     # single gpu device inference
-    # runner = Runner(cfg)
-    # runner.run(test_folder)
-
     runner = Runner(cfg)
-    if task_id == 0:
-        # detection task
-        runner.run_detect_single_chunk(chunk_id=chunk_id)
-    elif task_id == 1:
-        # recognition task, one gpu run
-        runner.run_recognize_single_chunk(chunk_id=0)
-    elif task_id == 2:
-        # structure task
-        runner.run_structure_single_chunk(chunk_id=chunk_id)
+    # runner.run('/home/zhaohj/Documents/dataset/Table/TAL/val')
+    runner.run_structure_single_chunk(chunk_id=0)
+
+    # runner = Runner(cfg)
+    # if task_id == 0:
+    #     # detection task
+    #     runner.run_detect_single_chunk(chunk_id=chunk_id)
+    # elif task_id == 1:
+    #     # recognition task, one gpu run
+    #     runner.run_recognize_single_chunk(chunk_id=0)
+    # elif task_id == 2:
+    #     # structure task
+    #     runner.run_structure_single_chunk(chunk_id=chunk_id)
 
 
 

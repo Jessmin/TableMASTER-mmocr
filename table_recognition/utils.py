@@ -293,10 +293,6 @@ def structure_visual(file_path, results):
             continue
         img = cv2.rectangle(img, (int(bbox[0]), int(bbox[1])),
                             (int(bbox[2]), int(bbox[3])), (0, 255, 0), thickness=1)
-    cv2.imwrite(os.path.join('/data_0/cache/structure_vis.jpg'), img)
+    cv2.imwrite('out_test.png', img)
 
     return img
-
-
-
-

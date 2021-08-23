@@ -19,12 +19,35 @@ def read_in_chunks(file_path, chunk_size=1024*1024):
         yield chunk_data
 
 
+def get_box(cells):
+    _min_x = 10000
+    _min_y = 10000
+    _max_x = 0
+    _max_y = 0
+    for cell in cells:
+        box = cell['bbox']
+        min_x = min([x[0] for x in box])
+        min_y = min([x[1] for x in box])
+        max_x = max([x[0] for x in box])
+        max_y = max([x[1] for x in box])
+        if min_x < _min_x:
+            _min_x = min_x
+        if min_y < _min_y:
+            _min_y = min_y
+        if max_x > _max_x:
+            _max_x = max_x
+        if max_y > _max_y:
+            _max_y = max_y
+    pt1 = [_min_x, _min_y]
+    pt2 = [_max_x, _max_y]
+    return _min_x, _min_y
+
 class PubtabnetParser(object):
     def __init__(self, jsonl_path, is_toy=True, split='val', is_pse_preLabel=False, chunks_nums=16):
         self.split = split
         self.raw_img_root = '/home/zhaohj/Documents/dataset/Table/TAL'
         # self.save_root = '/home/nas/media/Alice/dataset/TAL_OCR_TABLE表格识别竞赛训练集/output/'
-        self.save_root = '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/train/'
+        self.save_root = f'/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/{split}/'
         self.detection_txt_folder = self.save_root + 'TxtPreLabel_{}/'.format(split)
         self.recognition_folder = self.save_root + 'recognition_{}_img/'.format(split)
         self.recognition_txt_folder = self.save_root + 'recognition_{}_txt'.format(split)
@@ -308,7 +331,7 @@ class PubtabnetParser(object):
 
             # record image path
             image_path = os.path.join(self.raw_img_root, f'train_img', filename)
-            structure_fid.write(image_path + '\n')
+            structure_fid.write(image_path.replace('.jpg', '.png') + '\n')
 
             # record structure token
             cells = item['html']['cells']
@@ -322,6 +345,7 @@ class PubtabnetParser(object):
             # record bbox coord
             cell_count = self.count_merge_token_nums(encoded_token)
             # assert cell_nums == cell_count
+            min_x, min_y = get_box(cells)
             for cell in cells:
                 if 'bbox' not in cell.keys():
                     bbox_line = ','.join([str(0) for _ in range(4)]) + '\n'
@@ -329,7 +353,7 @@ class PubtabnetParser(object):
                     cell_bbox = cell['bbox']
                     _x = [x[0] for x in cell_bbox]
                     _y = [x[1] for x in cell_bbox]
-                    cell_bbox = [min(_x),min(_y), max(_x), max(_y)]
+                    cell_bbox = [min(_x) - min_x, min(_y) - min_y, max(_x) - min_x, max(_y) - min_y]
                     bbox_line = ','.join([str(b) for b in cell_bbox]) + '\n'
                 structure_fid.write(bbox_line)
 
@@ -428,8 +452,8 @@ if __name__ == '__main__':
 
     # parse train
     nproc = 16
-    jsonl_path = r'/home/zhaohj/Documents/dataset/Table/TAL/train.json'
-    parser = PubtabnetParser(jsonl_path, is_toy=False, split='train', is_pse_preLabel=False, chunks_nums=nproc)
+    jsonl_path = r'/home/zhaohj/Documents/dataset/Table/TAL/val.json'
+    parser = PubtabnetParser(jsonl_path, is_toy=False, split='val', is_pse_preLabel=False, chunks_nums=nproc)
 
     # multiprocessing
     start_time = time.time()

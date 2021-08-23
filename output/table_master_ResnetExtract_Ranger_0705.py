@@ -1,18 +1,21 @@
 checkpoint_config = dict(interval=1)
-log_config = dict(interval=100, hooks=[dict(type='TextLoggerHook')])
+log_config = dict(
+    interval=100,
+    hooks=[dict(type='TextLoggerHook'),
+           dict(type='TensorboardLoggerHook')])
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 load_from = None
 resume_from = None
 workflow = [('train', 1)]
-alphabet_file = '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/train/textline_recognition_alphabet.txt'
+alphabet_file = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/textline_recognition_alphabet.txt'
 alphabet_len = 3480
 max_seq_len = 500
 start_end_same = False
 label_convertor = dict(
     type='TableMasterConvertor',
     dict_file=
-    '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/train/textline_recognition_alphabet.txt',
+    '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/textline_recognition_alphabet.txt',
     max_seq_len=500,
     start_end_same=False,
     with_unknown=True)
@@ -46,7 +49,7 @@ model = dict(
     label_convertor=dict(
         type='TableMasterConvertor',
         dict_file=
-        '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/train/textline_recognition_alphabet.txt',
+        '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/textline_recognition_alphabet.txt',
         max_seq_len=500,
         start_end_same=False,
         with_unknown=True),
@@ -116,13 +119,13 @@ test_pipeline = [
         ])
 ]
 dataset_type = 'OCRDataset'
-train_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/train_img'
-train_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/train/StructureLabelAddEmptyBbox_train'
+train_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/Table/images'
+train_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/StructureLabelAddEmptyBbox_train'
 train1 = dict(
     type='OCRDataset',
-    img_prefix='/home/zhaohj/Documents/dataset/Table/TAL/train_img',
+    img_prefix='/home/zhaohj/Documents/dataset/Table/TAL/Table/images',
     ann_file=
-    '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/train/StructureLabelAddEmptyBbox_train',
+    '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/StructureLabelAddEmptyBbox_train',
     loader=dict(
         type='TableHardDiskLoader',
         repeat=1,
@@ -154,13 +157,13 @@ train1 = dict(
             ])
     ],
     test_mode=False)
-valid_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/train_img'
-valid_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/val/StructureLabelAddEmptyBbox_train'
+valid_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/Table/images'
+valid_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/StructureLabelAddEmptyBbox_val'
 valid = dict(
     type='OCRDataset',
-    img_prefix='/home/zhaohj/Documents/dataset/Table/TAL/train_img',
+    img_prefix='/home/zhaohj/Documents/dataset/Table/TAL/Table/images',
     ann_file=
-    '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/val/StructureLabelAddEmptyBbox_train',
+    '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/StructureLabelAddEmptyBbox_val',
     loader=dict(
         type='TableHardDiskLoader',
         repeat=1,
@@ -194,13 +197,13 @@ valid = dict(
     ],
     dataset_info='table_master_dataset',
     test_mode=True)
-test_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/train_img'
-test_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/val/StructureLabelAddEmptyBbox_train'
+test_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/Table/images'
+test_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/StructureLabelAddEmptyBbox_val'
 test = dict(
     type='OCRDataset',
-    img_prefix='/home/zhaohj/Documents/dataset/Table/TAL/train_img',
+    img_prefix='/home/zhaohj/Documents/dataset/Table/TAL/Table/images',
     ann_file=
-    '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/val/StructureLabelAddEmptyBbox_train',
+    '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/StructureLabelAddEmptyBbox_val',
     loader=dict(
         type='TableHardDiskLoader',
         repeat=1,
@@ -233,16 +236,17 @@ test = dict(
     dataset_info='table_master_dataset',
     test_mode=True)
 data = dict(
-    samples_per_gpu=8,
-    workers_per_gpu=2,
+    samples_per_gpu=2,
+    workers_per_gpu=1,
     train=dict(
         type='ConcatDataset',
         datasets=[
             dict(
                 type='OCRDataset',
-                img_prefix='/home/zhaohj/Documents/dataset/Table/TAL/train_img',
+                img_prefix=
+                '/home/zhaohj/Documents/dataset/Table/TAL/Table/images',
                 ann_file=
-                '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/train/StructureLabelAddEmptyBbox_train',
+                '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/StructureLabelAddEmptyBbox_train',
                 loader=dict(
                     type='TableHardDiskLoader',
                     repeat=1,
@@ -283,9 +287,10 @@ data = dict(
         datasets=[
             dict(
                 type='OCRDataset',
-                img_prefix='/home/zhaohj/Documents/dataset/Table/TAL/train_img',
+                img_prefix=
+                '/home/zhaohj/Documents/dataset/Table/TAL/Table/images',
                 ann_file=
-                '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/val/StructureLabelAddEmptyBbox_train',
+                '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/StructureLabelAddEmptyBbox_val',
                 loader=dict(
                     type='TableHardDiskLoader',
                     repeat=1,
@@ -328,9 +333,10 @@ data = dict(
         datasets=[
             dict(
                 type='OCRDataset',
-                img_prefix='/home/zhaohj/Documents/dataset/Table/TAL/train_img',
+                img_prefix=
+                '/home/zhaohj/Documents/dataset/Table/TAL/Table/images',
                 ann_file=
-                '/home/zhaohj/Documents/dataset/Table/TAL/precessed_data/val/StructureLabelAddEmptyBbox_train',
+                '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/StructureLabelAddEmptyBbox_val',
                 loader=dict(
                     type='TableHardDiskLoader',
                     repeat=1,
@@ -375,7 +381,7 @@ lr_config = dict(
     warmup_iters=50,
     warmup_ratio=0.3333333333333333,
     step=[12, 15])
-total_epochs = 17
+total_epochs = 200
 evaluation = dict(interval=1, metric='acc')
 fp16 = dict(loss_scale='dynamic')
 work_dir = './output/'
