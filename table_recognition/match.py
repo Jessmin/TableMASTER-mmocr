@@ -887,10 +887,6 @@ class Matcher:
 
         return merged_results
 
-
-
-
-
 if __name__ == "__main__":
     end2end_file = 'end2end_results.pkl'
     structure_master_file = 'structure_master_results.pkl'

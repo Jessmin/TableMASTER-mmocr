@@ -6,7 +6,7 @@ log_config = dict(
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 load_from = None
-resume_from = None
+resume_from = './output/epoch_52.pth'
 workflow = [('train', 1)]
 alphabet_file = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/textline_recognition_alphabet.txt'
 alphabet_len = 3480
@@ -120,12 +120,12 @@ test_pipeline = [
 ]
 dataset_type = 'OCRDataset'
 train_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/Table/images'
-train_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/StructureLabelAddEmptyBbox_train'
+train_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/train'
 train1 = dict(
     type='OCRDataset',
     img_prefix='/home/zhaohj/Documents/dataset/Table/TAL/Table/images',
     ann_file=
-    '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/StructureLabelAddEmptyBbox_train',
+    '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/train',
     loader=dict(
         type='TableHardDiskLoader',
         repeat=1,
@@ -158,12 +158,12 @@ train1 = dict(
     ],
     test_mode=False)
 valid_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/Table/images'
-valid_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/StructureLabelAddEmptyBbox_val'
+valid_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/val'
 valid = dict(
     type='OCRDataset',
     img_prefix='/home/zhaohj/Documents/dataset/Table/TAL/Table/images',
     ann_file=
-    '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/StructureLabelAddEmptyBbox_val',
+    '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/val',
     loader=dict(
         type='TableHardDiskLoader',
         repeat=1,
@@ -198,12 +198,12 @@ valid = dict(
     dataset_info='table_master_dataset',
     test_mode=True)
 test_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/Table/images'
-test_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/StructureLabelAddEmptyBbox_val'
+test_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/val'
 test = dict(
     type='OCRDataset',
     img_prefix='/home/zhaohj/Documents/dataset/Table/TAL/Table/images',
     ann_file=
-    '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/StructureLabelAddEmptyBbox_val',
+    '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/val',
     loader=dict(
         type='TableHardDiskLoader',
         repeat=1,
@@ -237,7 +237,7 @@ test = dict(
     test_mode=True)
 data = dict(
     samples_per_gpu=2,
-    workers_per_gpu=1,
+    workers_per_gpu=2,
     train=dict(
         type='ConcatDataset',
         datasets=[
@@ -246,7 +246,7 @@ data = dict(
                 img_prefix=
                 '/home/zhaohj/Documents/dataset/Table/TAL/Table/images',
                 ann_file=
-                '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/StructureLabelAddEmptyBbox_train',
+                '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/train',
                 loader=dict(
                     type='TableHardDiskLoader',
                     repeat=1,
@@ -290,7 +290,7 @@ data = dict(
                 img_prefix=
                 '/home/zhaohj/Documents/dataset/Table/TAL/Table/images',
                 ann_file=
-                '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/StructureLabelAddEmptyBbox_val',
+                '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/val',
                 loader=dict(
                     type='TableHardDiskLoader',
                     repeat=1,
@@ -336,7 +336,7 @@ data = dict(
                 img_prefix=
                 '/home/zhaohj/Documents/dataset/Table/TAL/Table/images',
                 ann_file=
-                '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/StructureLabelAddEmptyBbox_val',
+                '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/val/val',
                 loader=dict(
                     type='TableHardDiskLoader',
                     repeat=1,

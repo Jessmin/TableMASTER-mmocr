@@ -291,6 +291,7 @@ def structure_visual(file_path, results):
     for bbox in bboxes:
         if bbox.sum() == 0.:
             continue
+        print('aa')
         img = cv2.rectangle(img, (int(bbox[0]), int(bbox[1])),
                             (int(bbox[2]), int(bbox[3])), (0, 255, 0), thickness=1)
     cv2.imwrite('out_test.png', img)
