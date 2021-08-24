@@ -142,8 +142,8 @@ test_pipeline = [
 
 dataset_type = 'OCRDataset'
 train_img_prefix = '/home/zhaohj/Documents/dataset/Table/TAL/Table/images'
-# train_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/StructureLabelAddEmptyBbox_train'
-train_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/train'
+train_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/StructureLabelAddEmptyBbox_train'
+# train_anno_file1 = '/home/zhaohj/Documents/dataset/Table/TAL/Table/precessed_data/train/train'
 train1 = dict(
     type=dataset_type,
     img_prefix=train_img_prefix,

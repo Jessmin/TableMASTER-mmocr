@@ -160,8 +160,8 @@ class PubtabnetParser(object):
         pointer = 0
         merge_token_list = []
         # </tbody> is the last token str.
-        # while token_list[pointer] != '</tbody>':
-        while pointer < len(token_list):
+        while token_list[pointer] != '</tbody>':
+        # while pointer < len(token_list):
             if token_list[pointer] == '<td>':
                 tmp = token_list[pointer] + token_list[pointer+1]
                 merge_token_list.append(tmp)
@@ -183,6 +183,8 @@ class PubtabnetParser(object):
         bbox_idx = 0
         add_empty_bbox_token_list = []
         for idx, token in enumerate(token_list):
+            if bbox_idx == len(cells):
+                break
             if token == '<td></td>' or token == '<td':
                 if 'bbox' not in cells[bbox_idx].keys():
                     content = str(cells[bbox_idx]['tokens'])
@@ -259,12 +261,9 @@ class PubtabnetParser(object):
                 # record structure token
                 cells = item['html']['cells']
                 token_list = item['html']['structure']['tokens']
+                token_list.append("</tbody>")
                 merged_token = self.merge_token(token_list)
-                try:
-                    encoded_token = self.insert_empty_bbox_token(merged_token, cells)
-                except Exception:
-                    print('error==========')
-                    continue
+                encoded_token = self.insert_empty_bbox_token(merged_token, cells)
                 for et in encoded_token:
                     if et not in alphabet:
                         alphabet.append(et)
@@ -315,6 +314,7 @@ class PubtabnetParser(object):
 
             filename = item['filename']
             if filename not in this_chunk:
+                print(filename)
                 continue
 
             # parse info for Table Structure Master.
@@ -337,6 +337,7 @@ class PubtabnetParser(object):
             cells = item['html']['cells']
             cell_nums = len(cells)
             token_list = item['html']['structure']['tokens']
+            token_list.append("</tbody>")
             merged_token = self.merge_token(token_list)
             encoded_token = self.insert_empty_bbox_token(merged_token, cells)
             encoded_token_str = ','.join(encoded_token)
@@ -364,9 +365,9 @@ class PubtabnetParser(object):
                 pre_label_fid = open(pre_label_filepath, 'w')
 
             # parse info for Table Recognition and text line detection pre-label(optional)
-            img = cv2.imread(image_path)
-            thead_item_idxs = self.get_thead_item_idx(token_list)
-            for idx, cell in enumerate(cells):
+            # img = cv2.imread(image_path)
+            # thead_item_idxs = self.get_thead_item_idx(token_list)
+            # for idx, cell in enumerate(cells):
                 if 'bbox' not in cell.keys():
                     continue
                 cell_bbox = cell['bbox']
@@ -451,23 +452,23 @@ if __name__ == '__main__':
     """
 
     # parse train
-    nproc = 16
+    nproc = 4
     jsonl_path = r'/home/zhaohj/Documents/dataset/Table/TAL/val.json'
     parser = PubtabnetParser(jsonl_path, is_toy=False, split='val', is_pse_preLabel=False, chunks_nums=nproc)
 
     # multiprocessing
-    start_time = time.time()
-    filenames, count = parser.get_filenames(split='train')
-    img_chunks = parser.divide_img(filenames)
-    parser.parse_images_mp(img_chunks, nproc)
-    print("parse images cost {} seconds.".format(time.time()-start_time))
-
-    # single process
     # start_time = time.time()
     # filenames, count = parser.get_filenames(split='train')
     # img_chunks = parser.divide_img(filenames)
-    # parser.parse_images(img_chunks)
+    # parser.parse_images_mp(img_chunks, nproc)
     # print("parse images cost {} seconds.".format(time.time()-start_time))
+
+    # single process
+    start_time = time.time()
+    filenames, count = parser.get_filenames(split='val')
+    img_chunks = parser.divide_img(filenames)
+    parser.parse_images(img_chunks)
+    print("parse images cost {} seconds.".format(time.time()-start_time))
 
     # get structure recognition alphabet.
     parser.get_structure_alphabet()
